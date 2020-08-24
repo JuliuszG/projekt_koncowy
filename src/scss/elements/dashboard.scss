@@ -1,0 +1,52 @@
+.bck-btn{
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    @include links;
+}
+#dashboard{
+    color: white;
+    z-index: 10;
+    main{
+        box-sizing: border-box;
+        padding: 50px;
+        min-width: 80vw;
+        background: rgba($color: #fff, $alpha: 0.9);
+        min-height: 70vh;
+        margin: 0 auto;
+        color: #000;
+        @include tablet-portrait {
+            padding: 25px;
+        }
+        @include phone {
+            min-width: 100vw;
+        }
+        .dashboard-welcome{
+            font-size: 2rem;
+            display: flex;
+            justify-content: center;
+            font-weight: 700;
+            @include tablet-portrait {
+                font-size: 1.5rem;
+            }
+            @include phone {
+                font-size: 1rem;
+            }
+        }
+        .no-favs{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            h2{
+                margin: 100px 0 10px;
+                @include tablet-portrait {
+                    font-size: .8rem;
+                }
+            }
+            .link{
+                @include links(#000, #fff);
+            }
+        }
+    }
+}

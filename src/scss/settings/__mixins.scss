@@ -13,3 +13,21 @@
   @mixin big-desktop {
     @media (min-width: 1800px) { @content; }
   }
+  @mixin links($mc : #fff, $oc: #000) {
+    background: none;
+    outline: none;
+    border: 2px solid $mc;
+    padding: 10px 20px;
+    z-index: 666;
+    transition: all .2s ease-in;
+    color: $mc;
+    text-decoration: none;
+    font-size: 1.5rem;
+    @include phone {
+        font-size: 1.2rem;
+    }
+    &:hover{
+        background: rgba($color: $mc, $alpha: 0.6);
+        color: $oc;
+    }
+  }

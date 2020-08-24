@@ -1,7 +1,9 @@
 import React, { useState, useContext } from 'react';
 import {AuthContext} from '../context/context';
 import { fireBase } from '../config/config';
-import {Redirect} from 'react-router-dom';
+import {Redirect, Link} from 'react-router-dom';
+import {validateMail, validatePassword, matchPasswords} from '../config/validation';
+import Loader from './loader';
 
 
 const Register = ()=>{
@@ -16,14 +18,14 @@ const Register = ()=>{
         passwordRepeatError: false,
         fbError: false
     })
-    
+    const [pending, setpending] = useState(false);
     const handleChange = ({name, value}) => {
         setInp(prevState => ({
             ...prevState,
             [name]: value
         }))
     }
-    const validatePassword = i => {
+    const validateInputField = i => {
         if(i === "password"){
             if(inps.password.length < 6){
                 setError(prevState => ({
@@ -61,7 +63,7 @@ const Register = ()=>{
             if(!regEx.test(inps.username)){
                 setError(prevState => ({
                     ...prevState,
-                    usernameError: "niepoprawna nazwa użytkownika"
+                    usernameError: "niepoprawny email"
                 }))
             } else {
                 setError(prevState => ({
@@ -71,75 +73,86 @@ const Register = ()=>{
             }
         }
     }
-    const validateAll = ()=> {
-        // eslint-disable-next-line
-        const regEx = (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
-        if(inps.password.length > 6 
-            && inps.password.length < 15
-            && inps.passwordRepeat === inps.password
-            && regEx.test(inps.username)){
-                return true
-            } else {
-                return false
-            }
-    }
+
     const handleBlur = ({name}) => {
         if(name === "username"){
-           validatePassword("username");
+            validateInputField("username");
         }
         if(name === "password"){
-        validatePassword("password");
+            validateInputField("password");
         }
         if(name === "passwordRepeat"){
-        validatePassword("passwordRepeat");
+            validateInputField("passwordRepeat");
         }
     }
     const handleSubmit = (e) => {
         e.preventDefault();
-        if(validateAll()){
+        if(validateMail(inps.username) && 
+        validatePassword(inps.password,6,15) && 
+        matchPasswords(inps.password, inps.passwordRepeat)){
+            setpending(true);
             fireBase.auth().createUserWithEmailAndPassword(inps.username, inps.password)
-            .catch(error => {
-                if(error){
+            .catch(() => {
                     setError(prevState => ({
                         ...prevState,
                         fbError: "Takie konto już istnieje"
                     }))
-                }
             })
         } else {
-            validatePassword("username");
-            validatePassword("password");
-            validatePassword("passwordRepeat");
+            validateInputField("username");
+            validateInputField("password");
+            validateInputField("passwordRepeat");
         }     
     }
     const {user} = useContext(AuthContext);
-    const registerForm = 
-         (<section id={"register-form"}>
-            <div className={"container"}>
+    const registerForm = pending ? <Loader /> :
+         (<>
+            <Link className={"form-back-link"} to="/">Strona Główna</Link>
+            <div className={"form-container"}>
+                <h1>Rejestracja</h1>
                 <form onSubmit={e => handleSubmit(e)}>
-                {error.fbError ? <h2>{error.fbError}</h2> : null}
                     <div className={"input-cnt"}>
-                        <input type={"text"} name={"username"} id={"username-input"}
-                         onChange={e => handleChange(e.target)}  onBlur={e => handleBlur(e.target)}/>
-                        <label htmlFor={"username-input"}>Nazwa Użytkownika</label>
-                        {error.usernameError ? <h2>{error.usernameError}</h2> : null}
+                        <input 
+                            type={"text"} 
+                            name={"username"} 
+                            id={"username-input"}
+                            onChange={e => handleChange(e.target)}  
+                            onBlur={e => handleBlur(e.target)}
+                            placeholder={" "}
+                        />
+                        <label htmlFor={"username-input"}>Email</label>                       
                     </div>
                     <div className={"input-cnt"}>
-                        <input type={"password"} name={"password"} id={"password-input"} 
-                        onChange={e => handleChange(e.target)}  onBlur={e => handleBlur(e.target)}/>
-                        <label htmlFor={"username-input"}>Hasło</label>
-                        {error.passwordError ? <h2>{error.passwordError}</h2> : null}
+                        <input
+                            type={"password"} name={"password"}
+                            id={"password-input"} 
+                            onChange={e => handleChange(e.target)}
+                            onBlur={e => handleBlur(e.target)}
+                            placeholder={" "}
+                        />
+                        <label htmlFor={"username-input"}>Hasło</label>                    
                     </div>
                     <div className={"input-cnt"}>
-                        <input type={"password"} name={"passwordRepeat"} id={"password-repeat-input"} 
-                        onChange={e => handleChange(e.target)}  onBlur={e => handleBlur(e.target)}/>
+                        <input 
+                            type={"password"} 
+                            name={"passwordRepeat"} 
+                            id={"password-repeat-input"} 
+                            onChange={e => handleChange(e.target)}  
+                            onBlur={e => handleBlur(e.target)}
+                            placeholder={" "}
+                        />
                         <label htmlFor={"username-repeat-input"}>Powtórz Hasło</label>
-                        {error.passwordRepeatError ? <h2>{error.passwordRepeatError}</h2> : null}
                     </div>
-                    <button type={"submit"}>Rejestruj się</button>
+                    <div className={"form-btn-cnt"}>
+                        <button type={"submit"}>Rejestruj się</button>
+                    </div>
                 </form>
+                {error.passwordRepeatError ? <h2 className="form-error">{error.passwordRepeatError}</h2> : null}
+                {error.passwordError ? <h2 className="form-error">{error.passwordError}</h2> : null}
+                {error.usernameError ? <h2 className="form-error">{error.usernameError}</h2> : null}
+                {error.fbError ? <h2 className="form-error">{error.fbError}</h2> : null}
             </div>
-        </section>);
+        </>);
     const content = user ? <Redirect to="/" /> : registerForm;
     return content;
 }

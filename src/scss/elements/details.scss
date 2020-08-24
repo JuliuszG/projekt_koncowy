@@ -1,0 +1,130 @@
+.details-container{
+    color: white;
+    z-index: 10;
+    @include tablet-portrait {
+        font-size: 14px
+    }
+    @include phone {
+        font-size: 12px;
+    }
+    main{
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        box-sizing: border-box;
+        padding: 50px;
+        max-width: 70vw;
+        background: rgba($color: #fff, $alpha: 0.9);
+        min-height: 70vh;
+        margin: 0 auto;
+        color: #000;
+        @include tablet-portrait {
+            height: 50vh;
+            padding: 25px;
+            min-width: 100vw;
+            overflow-y: auto;
+        }
+        @include phone {
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            height: 30vh;
+            min-width: 100vw;
+        }
+        img{
+            width: 35%;
+            object-fit: cover;
+            @include phone {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+        .movie-details{
+            width: 60%;
+        }
+        .movie-details-title{
+            font-size: 1.5rem;
+            padding: 5px 0;
+            display: flex;
+            border-bottom: 1px solid #000;
+            @include tablet-portrait {
+                font-size: 1rem;
+             }
+            h2{
+                margin-right: .8rem;
+            }
+        }
+        .movie-details-details ul{
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 10px 0;
+            font-size: .6rem;
+            li{
+                border-right: 1px solid #000;
+                padding: 5px 10px;
+                &:last-child{
+                    border-right: none;
+                }
+            }
+        }
+        .movie-details-ratings{
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin: 10px 0 20px;
+            .imdb-rating{
+                margin-right: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: space-around;
+            }
+            .mc-rating{
+                display: flex;
+                align-items: center;
+            }
+            .mc-box{
+                margin-left: 5px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: .7rem;
+                width: 30px;
+                height: 30px;
+                background: #E0D500;
+            }
+        }
+        .movie-details-plot{
+            line-height: 1.2rem;
+            margin-bottom: 20px;
+            @include tablet-portrait {
+                margin-bottom: 10px;
+             }
+        }
+        .movie-details-writer{
+            margin: 10px 0;
+            @include tablet-portrait {
+                margin: 5px 0;
+             }
+        }
+        .btn-cnt-det{
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 40px;
+            @include tablet-portrait {
+               margin-top: 10px;
+            }
+            button{
+                outline: none;
+                border: 2px solid black;
+                padding: 10px 20px;
+                background: none;
+                transition: all .3s;
+                &:hover{
+                    background: #000;
+                    color: #ffffff;
+                }
+            }
+        }
+    }
+}
