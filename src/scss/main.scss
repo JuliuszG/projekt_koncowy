@@ -7,8 +7,9 @@
 @import './elements/results.scss';
 @import './elements/details.scss';
 
-body{
+*{
     box-sizing: border-box;
+    font-family: 'Raleway', sans-serif;
 }
 .loading-screen{
     height: 100vh;
@@ -30,3 +31,25 @@ body{
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
+
+.right{
+  position: relative;
+  right: 10px;
+  top: 10px;
+}
+.left{
+  left: 10px;
+  top: 10px;
+}
+.logo{
+  font-size: 3rem;
+  color: white;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+  font-family: "Open Sans", sans-serif;
+}

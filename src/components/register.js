@@ -4,6 +4,8 @@ import { fireBase } from '../config/config';
 import {Redirect, Link} from 'react-router-dom';
 import {validateMail, validatePassword, matchPasswords} from '../config/validation';
 import Loader from './loader';
+import { Button } from '@material-ui/core';
+import Form from 'react-bootstrap/Form';
 
 
 const Register = ()=>{
@@ -104,53 +106,62 @@ const Register = ()=>{
             validateInputField("passwordRepeat");
         }     
     }
+    const btnStyle = {
+        position: "absolute",
+        top: 20,
+        right: 20,
+        zIndex: 400
+    }
     const {user} = useContext(AuthContext);
     const registerForm = pending ? <Loader /> :
          (<>
-            <Link className={"form-back-link"} to="/">Strona Główna</Link>
-            <div className={"form-container"}>
-                <h1>Rejestracja</h1>
-                <form onSubmit={e => handleSubmit(e)}>
-                    <div className={"input-cnt"}>
-                        <input 
-                            type={"text"} 
-                            name={"username"} 
-                            id={"username-input"}
-                            onChange={e => handleChange(e.target)}  
-                            onBlur={e => handleBlur(e.target)}
-                            placeholder={" "}
-                        />
-                        <label htmlFor={"username-input"}>Email</label>                       
-                    </div>
-                    <div className={"input-cnt"}>
-                        <input
-                            type={"password"} name={"password"}
-                            id={"password-input"} 
-                            onChange={e => handleChange(e.target)}
-                            onBlur={e => handleBlur(e.target)}
-                            placeholder={" "}
-                        />
-                        <label htmlFor={"username-input"}>Hasło</label>                    
-                    </div>
-                    <div className={"input-cnt"}>
-                        <input 
-                            type={"password"} 
-                            name={"passwordRepeat"} 
-                            id={"password-repeat-input"} 
-                            onChange={e => handleChange(e.target)}  
-                            onBlur={e => handleBlur(e.target)}
-                            placeholder={" "}
-                        />
-                        <label htmlFor={"username-repeat-input"}>Powtórz Hasło</label>
-                    </div>
-                    <div className={"form-btn-cnt"}>
-                        <button type={"submit"}>Rejestruj się</button>
-                    </div>
-                </form>
-                {error.passwordRepeatError ? <h2 className="form-error">{error.passwordRepeatError}</h2> : null}
-                {error.passwordError ? <h2 className="form-error">{error.passwordError}</h2> : null}
-                {error.usernameError ? <h2 className="form-error">{error.usernameError}</h2> : null}
-                {error.fbError ? <h2 className="form-error">{error.fbError}</h2> : null}
+            <Button size="large" variant="contained" color="secondary" style={btnStyle} component={Link} to="/">Wróć</Button>
+    <div style={
+                    {
+                        color: "#fff",
+                        zIndex: "55",
+                    }
+                }
+                className={"container w-25"}>
+                    <h1>Logowanie</h1>
+                <Form onSubmit={e => handleSubmit(e)}>
+                    <Form.Group controlId="text">
+                        <Form.Label>Email</Form.Label>
+                        <Form.Control 
+                         required 
+                         size="lg"
+                         name="username"
+                         type="text"
+                         placeholder="Wpisz swój email"
+                         onChange={e => handleChange(e.target)}
+                          />
+                    </Form.Group>
+                    <Form.Group controlId="pass">
+                        <Form.Label>Hasło</Form.Label>
+                        <Form.Control 
+                         required 
+                         size="lg"
+                         name="password"
+                         type="password"
+                         placeholder="Wpisz swoje hasło"
+                         onChange={e => handleChange(e.target)}
+                          />
+                    </Form.Group>
+                    <Form.Group controlId="pass">
+                        <Form.Label>Powtórz Hasło</Form.Label>
+                        <Form.Control 
+                         required 
+                         size="lg"
+                         name="passwordRepeat"
+                         type="password"
+                         placeholder="Powtórz hasło"
+                         onChange={e => handleChange(e.target)}
+                          />
+                    </Form.Group>
+                    <Button variant="contained" size="large" color="secondary" type="submit">
+                       Zarejestruj się
+                    </Button>
+                </Form>
             </div>
         </>);
     const content = user ? <Redirect to="/" /> : registerForm;

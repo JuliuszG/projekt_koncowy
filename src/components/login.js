@@ -1,75 +1,91 @@
-import React, { useState, useContext } from 'react';
+import React, {useState, useContext} from 'react';
 import {AuthContext} from '../context/context';
-import { fireBase } from '../config/config';
+import {fireBase} from '../config/config';
 import {Redirect, Link} from 'react-router-dom';
 import {validateMail, validatePassword} from '../config/validation';
 import Loader from './loader';
+import {Button} from '@material-ui/core';
+import Form from 'react-bootstrap/Form';
 
-const Login = ()=>{
-const [inps, setInp] = useState({
-    username: false,
-    password: false
-});
-const [error, setError] = useState(false);
-const [pending, setpending] = useState(false);
+const Login = () => {
+    const [inps, setInp] = useState({username: false, password: false});
+    const [error, setError] = useState(false);
+    const [pending, setpending] = useState(false);
 
-const handleChange = ({name, value}) => {
-    if(error){
-        setError(false);
+    const handleChange = ({name, value}) => {
+        if (error) {
+            setError(false);
+        };
+        setInp(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
     };
-    setInp(prevState => ({
-        ...prevState,
-        [name]: value
-    }));
-};
-const {user} = useContext(AuthContext);
+    const {user} = useContext(AuthContext);
 
-const handleSubmit = e => {
-    e.preventDefault();
-    setpending(true);
-    if(validateMail(inps.username) && validatePassword(inps.password,6,15)){
-        fireBase.auth().signInWithEmailAndPassword(inps.username, inps.password)
-        .catch(() => {
-            setpending(false);
+    const handleSubmit = e => {
+        e.preventDefault();
+        setpending(true);
+        if (validateMail(inps.username) && validatePassword(inps.password, 6, 15)) {
+            fireBase.auth().signInWithEmailAndPassword(inps.username, inps.password).catch(() => {
+                setpending(false);
                 setError("Błędny email lub hasło");
-        })
-    } else {
-        setpending(false);
-        setError("Błędny email lub hasło");
-    };     
-};
-
-const loginForm = pending ? <Loader /> :(
-    <>
-        <Link className={"form-back-link"} to="/">Strona Główna</Link>
-        <div className={"form-container"}>
-            <h1>Logowanie</h1>
-            <form onSubmit={e => handleSubmit(e)}>
-            <div className={"input-cnt"}>
-                        <input type={"text"} name={"username"} id={"username-input-login"}
-                         onChange={e => handleChange(e.target)} 
-                         placeholder={" "}/>
-                        <label htmlFor={"username-input-login"}>Email</label>
-                    </div>
-                    <div className={"input-cnt"}>
-                        <input type={"password"} name={"password"} id={"password-input-login"} 
-                        onChange={e => handleChange(e.target)} 
-                        placeholder={" "}/>
-                        <label htmlFor={"username-input-login"}>Hasło</label>
-                    </div>
-                    <div className={"form-btn-cnt"}>
-                        <button type={"submit"}>Zaloguj się</button>
-                        <Link className={"form-small-link"} to="/register">Nie masz konta ?</Link>
-                    </div>
-            </form>
-            {error ? <div className="form-error">{error}</div> : null}
-        </div>
-    </>
+            })
+        } else {
+            setpending(false);
+            setError("Błędny email lub hasło");
+        };
+    };
+    const btnStyle = {
+        position: "absolute",
+        top: 20,
+        right: 20,
+        zIndex: 400
+    }
+    const loginForm = pending ? <Loader/>: (
+        <>
+            <Button size="large" variant="contained" color="secondary"
+                style={btnStyle}
+                component={Link}
+                to="/">Wróć</Button>
+            <div style={
+                    {
+                        color: "#fff",
+                        zIndex: "55"
+                    }
+                }
+                className={"container w-25"}>
+                <h1>Logowanie</h1>
+                <Form onSubmit={
+                    e => handleSubmit(e)
+                }>
+                    <Form.Group controlId="text">
+                        <Form.Label>Email</Form.Label>
+                        <Form.Control required size="lg" name="username" type="text" placeholder="Wpisz swój email"
+                            onChange={
+                                e => handleChange(e.target)
+                            }/>
+                    </Form.Group>
+                    <Form.Group controlId="pass">
+                        <Form.Label>Hasło</Form.Label>
+                        <Form.Control required size="lg" name="password" type="password" placeholder="Wpisz swój email"
+                            onChange={
+                                e => handleChange(e.target)
+                            }/>
+                    </Form.Group>
+                    <Button variant="contained" size="large" color="secondary" type="submit">
+                        Zaloguj się
+                    </Button>
+                </Form>
+            </div>
+        </>
     );
 
-const content = user ? (<><Redirect to="/dashboard" /></>) : loginForm;
+    const content = user ? (
+        <><Redirect to="/dashboard"/></>
+    ) : loginForm;
 
-return content;
+    return content;
 }
 
 export default Login;

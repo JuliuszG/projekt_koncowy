@@ -7,7 +7,7 @@ export const AuthContext = React.createContext();
 
 const AuthProvider = ({children}) => {
     const [user, setUser] = useState(null);
-    const [pending, setPending] = useState(true)
+    const [pending, setPending] = useState(true);
 
     const logOut = e => {
         e.preventDefault();
