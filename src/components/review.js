@@ -13,7 +13,7 @@ const Review = ({location}) => {
             const {review} = state;
             setreview(review);
         }
-    }, [])
+    }, [state])
 
     const content = state ? (
         <>

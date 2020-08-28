@@ -19,7 +19,7 @@ const Dashboard = () => {
         db.collection("Reviews").orderBy("dateAdded", "desc").limit(3).get()
         .then(snapshot => snapshot.docs.forEach(el => setdata(prevState => [...prevState, el.data()])))
         .then(() => setpending(false));
-    }, [])
+    }, [db])
 
     const {user} = useContext(AuthContext);
     const content = user ? (

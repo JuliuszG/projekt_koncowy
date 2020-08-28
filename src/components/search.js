@@ -64,6 +64,7 @@ const Search = () => {
             console.log("wpisz tytuł");
         } else {
             seterror("Musisz wpisać przynajmniej tytuł");
+            console.log(error);
         }
     }
     const content = user ? (

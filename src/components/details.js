@@ -24,7 +24,7 @@ const Details = ({location}) => {
             }))
             .then(() => setpending(false));
         }
-    }, []);
+    }, [state]);
     const movieInfo = movie ? (
         <> 
             <div style={{height: "100vh", color: "#fff", zIndex: "55"}}

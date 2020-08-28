@@ -38,7 +38,7 @@ const CreateReview = ({location}) => {
             })  
         }
         setpending(false);
-    }, []);
+    }, [state]);
     const handleChange = ({name, value}) => {
         setinps(prevState => ({
             ...prevState,
@@ -65,6 +65,7 @@ const CreateReview = ({location}) => {
 
             } else {
                 seterror("Za krótki tytuł lub treść");
+                console.log(error);
             }
 
         } else {

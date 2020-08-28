@@ -23,7 +23,7 @@ useEffect(() => {
             inps
         })
     }
-}, []);
+}, [state]);
 useEffect(() => {
     if(data) setpagPages(Math.round(Number(data.inps.results) / 10));
 }, [data])
@@ -37,7 +37,7 @@ useEffect(() => {
             data: data.Search
         })));
 }
-}, [page]);
+}, [page, data]);
 const title = data ? data.inps.title : null;
 const resultTrue = data ? (
     data.data !== 404 ? (

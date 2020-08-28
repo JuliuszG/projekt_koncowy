@@ -72,21 +72,22 @@ const Register = ()=>{
                     ...prevState,
                     usernameError: false
                 }))
+                console.log(error);
             }
         }
     }
 
-    const handleBlur = ({name}) => {
-        if(name === "username"){
-            validateInputField("username");
-        }
-        if(name === "password"){
-            validateInputField("password");
-        }
-        if(name === "passwordRepeat"){
-            validateInputField("passwordRepeat");
-        }
-    }
+    // const handleBlur = ({name}) => {
+    //     if(name === "username"){
+    //         validateInputField("username");
+    //     }
+    //     if(name === "password"){
+    //         validateInputField("password");
+    //     }
+    //     if(name === "passwordRepeat"){
+    //         validateInputField("passwordRepeat");
+    //     }
+    // }
     const handleSubmit = (e) => {
         e.preventDefault();
         if(validateMail(inps.username) && 
